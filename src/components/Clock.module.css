@@ -1,0 +1,9 @@
+.clock {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}

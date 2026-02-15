@@ -1,0 +1,114 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0;
+    width: 100%;
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+.highlight {
+    animation: none;
+    transform: none;
+    box-shadow: none;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    margin-right: 1rem;
+}
+
+.lineBadge {
+    background: transparent;
+    color: var(--text-color);
+    width: auto;
+    border-radius: 0;
+    box-shadow: none;
+    padding-right: 1rem;
+    min-width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.lineNumber {
+    font-size: 2.5rem;
+    font-weight: normal;
+}
+
+.destination {
+    font-size: 2.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1;
+}
+
+@media (max-width: 600px) {
+    .destination {
+        font-size: 2rem;
+    }
+}
+
+/* RIGHT SIDE LAYOUT - FIXED COLUMNS */
+.right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* Sufficient fixed width to hold both columns without wrapping */
+    min-width: 200px;
+}
+
+.departure {
+    font-size: 2.5rem;
+    font-weight: normal;
+    color: var(--text-color);
+
+    /* Fixed width for the time column */
+    /* This ensures it ALWAYS sits in the same horizontal spot */
+    width: 100px;
+    text-align: right;
+
+    /* Prevent collapsing */
+    flex-shrink: 0;
+}
+
+.delayContainer {
+    /* Fixed width for the delay column */
+    /* This ensures it occupies space even if empty (if we styled the div purely) */
+    /* But since the div is always rendered by React, this width holds the slot */
+    width: 90px;
+    text-align: left;
+    margin-left: 10px;
+
+    /* Flex to align internal span */
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    /* Ensure height matches to prevent alignment glitches */
+    height: 3rem;
+}
+
+.delay {
+    color: #ff3333;
+    /* Red color for delay */
+    font-weight: bold;
+    animation: blink 1s infinite alternate;
+    font-size: 2rem;
+    white-space: nowrap;
+}
+
+@keyframes blink {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.7;
+    }
+}

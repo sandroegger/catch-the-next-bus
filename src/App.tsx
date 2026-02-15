@@ -1,35 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import styles from './App.module.css';
+import { useConnections } from './hooks/useConnections';
+import { ConnectionCard } from './components/ConnectionCard';
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { connections, loading, error, refresh, lastUpdated } = useConnections(
+    'Bern, Zytglogge',
+    'Bern, Hauptbahnhof'
+  );
+
+  // Filter connections that are effectively "now" or in the past (less than 1 min away)
+  const now = new Date();
+  const validConnections = connections.filter(conn => {
+    const departure = new Date(conn.departure);
+    // If there is a delay, the real departure is later.
+    // We should filter based on the REAL departure time.
+    let realDepartureTime = departure.getTime();
+    if (conn.delay) {
+      realDepartureTime += conn.delay * 60000;
+    }
+
+    const diffMs = realDepartureTime - now.getTime();
+    return diffMs >= 120000; // 2 minutes in ms
+  });
+
+  // Unique Line Logic: Only show the NEXT bus/tram for each line.
+  // Group by line number/category and pick the first one.
+  const uniqueConnections: typeof connections = [];
+  const seenLines = new Set<string>();
+
+  for (const conn of validConnections) {
+    const lineKey = conn.line; // e.g., "B12" or "9"
+
+    if (!seenLines.has(lineKey)) {
+      uniqueConnections.push(conn);
+      seenLines.add(lineKey);
+    }
+  }
+
+  // Limit to 5 displayed entries as requested
+  const displayConnections = uniqueConnections.slice(0, 5);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className={styles.container}>
+      <main className={styles.main}>
+        {error && <div className={styles.errorMessage}>{error}</div>}
+
+        <div className={styles.connectionList}>
+          {displayConnections.length > 0 ? (
+            displayConnections.map((conn, index) => (
+              <ConnectionCard
+                key={conn.uniqueId}
+                connection={conn}
+                isNext={index === 0}
+              />
+            ))
+          ) : (
+            !loading && <div className={styles.noData}>No upcoming connections (&gt; 1 min).</div>
+          )}
+        </div>
+      </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          {lastUpdated && (
+            <span className={styles.lastUpdated}>Updated: {lastUpdated.toLocaleTimeString('de-CH')}</span>
+          )}
+          <button onClick={refresh} className={styles.refreshButton} disabled={loading}>
+            {loading ? '...' : '↻'}
+          </button>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;

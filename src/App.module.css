@@ -1,0 +1,91 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Vertically center */
+    align-items: center;
+    /* Horizontally center */
+    height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    color: var(--text-color);
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.main {
+    width: 100%;
+    max-width: 800px;
+    /* Limit width */
+    display: flex;
+    justify-content: center;
+}
+
+.connectionList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    /* Tighter gap for line board feel */
+    width: 100%;
+}
+
+.errorMessage {
+    border: 1px dashed #ef4444;
+    color: #ef4444;
+    padding: 1rem;
+    text-align: center;
+    font-family: monospace;
+}
+
+.noData {
+    text-align: center;
+    color: var(--text-color);
+    opacity: 0.5;
+    margin-top: 1rem;
+    text-transform: uppercase;
+}
+
+.footer {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.footerContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lastUpdated {
+    font-size: 0.75rem;
+    color: var(--text-color);
+    opacity: 0.3;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.refreshButton {
+    background: transparent;
+    border: 1px solid rgba(255, 176, 0, 0.3);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    border-radius: 4px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.refreshButton:hover {
+    opacity: 1;
+    border-color: var(--text-color);
+}
+
+.refreshButton:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
