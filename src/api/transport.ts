@@ -12,7 +12,7 @@ const STATIONBOARD_URL = 'https://transport.opendata.ch/v1/stationboard';
 
 import { CONFIG } from '../config';
 
-export async function fetchConnections(from: string, to: string, limit = CONFIG.API_FETCH_LIMIT): Promise<TransportConnection[]> {
+export async function fetchConnections(from: string, _to: string, limit = CONFIG.API_FETCH_LIMIT): Promise<TransportConnection[]> {
     const params = new URLSearchParams({
         station: from,
         limit: limit.toString(),
