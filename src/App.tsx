@@ -3,10 +3,12 @@ import { useConnections } from './hooks/useConnections';
 import { ConnectionCard } from './components/ConnectionCard';
 
 
+import { CONFIG } from './config';
+
 function App() {
   const { connections, loading, error, refresh, lastUpdated } = useConnections(
-    'Bern, Zytglogge',
-    'Bern, Hauptbahnhof'
+    CONFIG.STATION_FROM,
+    CONFIG.STATION_TO
   );
 
   // Filter connections that are effectively "now" or in the past (less than 1 min away)
@@ -21,7 +23,7 @@ function App() {
     }
 
     const diffMs = realDepartureTime - now.getTime();
-    return diffMs >= 120000; // 2 minutes in ms
+    return diffMs >= CONFIG.WALK_THRESHOLD_MINUTES * 60 * 1000;
   });
 
   // Unique Line Logic: Only show the NEXT bus/tram for each line.

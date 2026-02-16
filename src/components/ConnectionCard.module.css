@@ -38,7 +38,7 @@
 
 .lineNumber {
     font-size: 2.5rem;
-    font-weight: normal;
+    font-weight: 600;
 }
 
 .destination {
@@ -65,7 +65,7 @@
 
 .departure {
     font-size: 2.5rem;
-    font-weight: normal;
+    font-weight: 600;
     color: var(--text-color);
 
     /* Fixed width for the time column */
@@ -97,7 +97,9 @@
 .delay {
     color: #ff3333;
     /* Red color for delay */
-    font-weight: bold;
+    font-family: var(--font-family);
+    font-weight: 600;
+    /* Use explicit semi-bold */
     animation: blink 1s infinite alternate;
     font-size: 2rem;
     white-space: nowrap;

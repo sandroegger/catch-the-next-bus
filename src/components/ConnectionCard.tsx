@@ -2,6 +2,8 @@ import styles from './ConnectionCard.module.css';
 import { formatRelativeTime } from '../utils/format';
 import type { TransportConnection } from '../api/transport';
 
+import { CONFIG } from '../config';
+
 interface Props {
     connection: TransportConnection;
     isNext: boolean;
@@ -31,8 +33,8 @@ export function ConnectionCard({ connection, isNext }: Props) {
             <div className={styles.right}>
                 <div className={styles.departure}>{relativeTime}</div>
                 <div className={styles.delayContainer}>
-                    {/* Ensure we strictly check for positive delay to avoid rendering '0' */}
-                    {(delay || 0) > 0 && (
+                    {/* Only show delay if it is above the threshold (SBB logic) */}
+                    {(delay || 0) >= CONFIG.DELAY_DISPLAY_THRESHOLD_MINUTES && (
                         <span className={styles.delay}>+{delay}'</span>
                     )}
                 </div>

@@ -10,7 +10,9 @@ export interface TransportConnection {
 
 const STATIONBOARD_URL = 'https://transport.opendata.ch/v1/stationboard';
 
-export async function fetchConnections(from: string, to: string, limit = 40): Promise<TransportConnection[]> {
+import { CONFIG } from '../config';
+
+export async function fetchConnections(from: string, to: string, limit = CONFIG.API_FETCH_LIMIT): Promise<TransportConnection[]> {
     const params = new URLSearchParams({
         station: from,
         limit: limit.toString(),
@@ -82,12 +84,15 @@ export async function fetchConnections(from: string, to: string, limit = 40): Pr
 
         const finalDestination = destinationMap[number] || entry.to;
 
-        // Parse delay safely
-        let parsedDelay: number | null = null;
-        if (entry.stop.delay !== null && entry.stop.delay !== undefined) {
-            const d = parseInt(entry.stop.delay, 10);
-            if (!isNaN(d) && d > 0) {
-                parsedDelay = d;
+        // Calculate Delay from Prognosis vs Scheduled
+        let calculatedDelay: number | null = null;
+        if (entry.stop.prognosis && entry.stop.prognosis.departure) {
+            const scheduledTime = new Date(entry.stop.departure).getTime();
+            const realTime = new Date(entry.stop.prognosis.departure).getTime();
+            const diffMins = Math.floor((realTime - scheduledTime) / 60000);
+
+            if (diffMins > 0) {
+                calculatedDelay = diffMins;
             }
         }
 
@@ -95,9 +100,9 @@ export async function fetchConnections(from: string, to: string, limit = 40): Pr
             uniqueId: `${lineDisplay}-${entry.stop.departure}`,
             line: lineDisplay,
             to: finalDestination,
-            departure: entry.stop.departure,
+            departure: entry.stop.departure, // BACK TO SCHEDULED
             platform: entry.stop.platform,
-            delay: parsedDelay,
+            delay: calculatedDelay,
         };
     });
 }

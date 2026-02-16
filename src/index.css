@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;600;700&display=swap');
 
 :root {
   --bg-color: #000000;
@@ -7,7 +7,7 @@
   --accent-color: #ffb000;
   --card-bg: transparent;
   --card-border: none;
-  --font-family: 'DotGothic16', sans-serif;
+  --font-family: 'Doto', sans-serif;
 }
 
 * {
@@ -18,6 +18,8 @@
 
 body {
   font-family: var(--font-family);
+  font-weight: 600;
+  /* Semi-Bold */
   background-color: var(--bg-color);
   color: var(--text-color);
   -webkit-font-smoothing: none;
