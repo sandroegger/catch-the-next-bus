@@ -5,6 +5,37 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>app---catch-the-next-bus</title>
+    <script>
+      let cursorTimer;
+      const hideCursorStyle = document.createElement('style');
+      hideCursorStyle.innerHTML = '* { cursor: none !important; }';
+
+      function hideCursor() {
+        if (!document.head.contains(hideCursorStyle)) {
+          document.head.appendChild(hideCursorStyle);
+        }
+      }
+
+      function showCursor() {
+        if (document.head.contains(hideCursorStyle)) {
+          document.head.removeChild(hideCursorStyle);
+        }
+      }
+
+      function resetTimer() {
+        showCursor();
+        clearTimeout(cursorTimer);
+        cursorTimer = setTimeout(hideCursor, 3000); // Hide after 3s
+      }
+
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('mousedown', resetTimer);
+      window.addEventListener('touchstart', resetTimer);
+      window.addEventListener('keydown', resetTimer);
+      
+      // Hide the cursor by default on boot
+      hideCursor();
+    </script>
   </head>
   <body>
     <div id="root"></div>
