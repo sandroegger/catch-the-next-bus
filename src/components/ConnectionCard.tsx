@@ -27,7 +27,10 @@ export function ConnectionCard({ connection, isNext }: Props) {
                 <div className={styles.lineBadge}>
                     <span className={styles.lineNumber}>{lineDisplay}</span>
                 </div>
-                <div className={styles.destination}>{to}</div>
+                <div className={styles.destination}>
+                    {to}
+                    {connection.isStar && <span className={styles.star}>★</span>}
+                </div>
             </div>
 
             <div className={styles.right}>

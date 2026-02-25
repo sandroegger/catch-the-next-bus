@@ -48,6 +48,14 @@
     flex: 1;
 }
 
+.star {
+    margin-left: 0.5rem;
+    color: #ffd700;
+    /* Gold color */
+    font-size: 2.2rem;
+    vertical-align: middle;
+}
+
 @media (max-width: 600px) {
     .destination {
         font-size: 2rem;

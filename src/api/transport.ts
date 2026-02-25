@@ -6,6 +6,7 @@ export interface TransportConnection {
     departure: string;// ISO string
     platform?: string;
     delay?: number | null; // Delay in minutes
+    isStar?: boolean;
 }
 
 const STATIONBOARD_URL = 'https://transport.opendata.ch/v1/stationboard';
@@ -99,6 +100,12 @@ export async function fetchConnections(from: string, _to: string, limit = CONFIG
             }
         }
 
+        // Detect "Star Connection" (Line 12, 06:46)
+        const departureDate = new Date(entry.stop.departure);
+        const hours = departureDate.getHours();
+        const minutes = departureDate.getMinutes();
+        const isStarConnection = lineDisplay === '12' && hours === 6 && minutes === 46;
+
         return {
             uniqueId: `${lineDisplay}-${entry.stop.departure}`,
             line: lineDisplay,
@@ -106,6 +113,7 @@ export async function fetchConnections(from: string, _to: string, limit = CONFIG
             departure: entry.stop.departure, // BACK TO SCHEDULED
             platform: entry.stop.platform,
             delay: calculatedDelay,
+            isStar: isStarConnection,
         };
     });
 }

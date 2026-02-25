@@ -23,6 +23,12 @@ function App() {
     }
 
     const diffMs = realDepartureTime - now.getTime();
+
+    // Star Connection bypass: visible until it departs (diffMs >= 0)
+    if (conn.isStar) {
+      return diffMs >= 0;
+    }
+
     return diffMs >= CONFIG.WALK_THRESHOLD_MINUTES * 60 * 1000;
   });
 
