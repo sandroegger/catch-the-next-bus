@@ -8,7 +8,7 @@ export function formatRelativeTime(isoString: string): string {
     const now = new Date();
     const departure = new Date(isoString);
     const diffMs = departure.getTime() - now.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
+    const diffMins = Math.ceil(diffMs / 60000);
 
     if (diffMins > 40) {
         return departure.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });

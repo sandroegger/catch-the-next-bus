@@ -58,7 +58,7 @@ export async function fetchConnections(from: string, _to: string, limit = CONFIG
         return true;
     });
 
-    return validDepartures.map((entry: any) => {
+    const connections = validDepartures.map((entry: any) => {
         const category = entry.category; // 'B', 'T', 'BUS', 'TRAM', 'NFB'
         const number = entry.number;
         let lineDisplay = number;
@@ -116,4 +116,6 @@ export async function fetchConnections(from: string, _to: string, limit = CONFIG
             isStar: isStarConnection,
         };
     });
+
+    return connections;
 }
