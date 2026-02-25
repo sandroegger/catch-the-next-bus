@@ -40,8 +40,8 @@ function App() {
     }
   }
 
-  // Limit to 5 displayed entries as requested
-  const displayConnections = uniqueConnections.slice(0, 5);
+  // Limit to 6 displayed entries as requested from the user
+  const displayConnections = uniqueConnections.slice(0, 6);
 
   return (
     <div className={styles.container}>

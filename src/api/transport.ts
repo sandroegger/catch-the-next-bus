@@ -51,6 +51,9 @@ export async function fetchConnections(from: string, _to: string, limit = CONFIG
         const isBad = badDestinations.some(d => destination.includes(d));
         if (isBad) return false;
 
+        // Exclude line 30
+        if (entry.number === '30') return false;
+
         return true;
     });
 

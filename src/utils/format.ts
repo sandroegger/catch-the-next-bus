@@ -10,6 +10,10 @@ export function formatRelativeTime(isoString: string): string {
     const diffMs = departure.getTime() - now.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
+    if (diffMins > 40) {
+        return departure.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
+    }
+
     if (diffMins <= 0) return '0\''; // Show 0' if it's very close/now
     return `${diffMins}'`;
 }

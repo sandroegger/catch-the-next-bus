@@ -10,7 +10,18 @@ interface UseConnectionsResult {
     lastUpdated: Date | null;
 }
 
-const REFRESH_INTERVAL = 5000; // 5 seconds
+const GET_REFRESH_INTERVAL = () => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const totalMinutes = hours * 60 + minutes;
+
+    // Midnight (00:00) is 0, 05:30 is 5 * 60 + 30 = 330
+    if (totalMinutes < 330) {
+        return 30000; // 30 seconds at night
+    }
+    return 15000; // 15 seconds during the day
+};
 
 export function useConnections(from: string, to: string): UseConnectionsResult {
     const [connections, setConnections] = useState<TransportConnection[]>([]);
@@ -36,9 +47,23 @@ export function useConnections(from: string, to: string): UseConnectionsResult {
     useEffect(() => {
         fetchData();
 
-        const intervalId = setInterval(fetchData, REFRESH_INTERVAL);
+        const setupInterval = () => {
+            const interval = GET_REFRESH_INTERVAL();
+            return setInterval(fetchData, interval);
+        };
 
-        return () => clearInterval(intervalId);
+        let intervalId = setupInterval();
+
+        // Refresh the interval logic every minute to catch the transition times
+        const keeperId = setInterval(() => {
+            clearInterval(intervalId);
+            intervalId = setupInterval();
+        }, 60000);
+
+        return () => {
+            clearInterval(intervalId);
+            clearInterval(keeperId);
+        };
     }, [fetchData]);
 
     return { connections, loading, error, refresh: fetchData, lastUpdated };
